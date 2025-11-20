@@ -1,3 +1,11 @@
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;     /* muda aqui para o que quiseres */
+  /* ou podes usar valores mais curtos/mais longos */
+  /* animation-duration: 150ms;  300ms;  500ms;  1s; etc. */
+}
+
 html {
   background-color: #f1f5f9;
   font-family: sans-serif;
