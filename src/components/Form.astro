@@ -1,0 +1,155 @@
+---
+---
+<form
+  name="contact"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  id="contact-form"
+  class="contact-form"
+>
+  <!-- Campo escondido para o honeypot da Netlify -->
+  <input type="hidden" name="form-name" value="contact" />
+  <p class="hidden">
+    <label>Não preenchas se fores humano: <input name="bot-field" /></label>
+  </p>
+
+  <div class="field">
+    <label for="nome">Nome</label>
+    <input type="text" name="nome" id="nome" required placeholder="João Silva" />
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" required placeholder="joao@email.com" />
+  </div>
+
+  <div class="field">
+    <label for="mensagem">Mensagem</label>
+    <textarea name="mensagem" id="mensagem" rows="6" required placeholder="Escreve aqui a tua mensagem..."></textarea>
+  </div>
+
+  <div class="field">
+    <button type="submit">Enviar mensagem</button>
+  </div>
+
+  <div id="form-message" role="alert"></div>
+</form>
+
+<style>
+  .contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    font-family: system-ui, sans-serif;
+  }
+
+  .hidden { display: none; }
+
+  .field {
+    margin-bottom: 1.5rem;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+  }
+
+  .field button {
+    background: #6366f1;
+    color: white;
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+  }
+
+  .field button:hover {
+    background: #4f46e5;
+  }
+
+  .field button:disabled {
+    background: #a5a7f3;
+    cursor: not-allowed;
+  }
+
+  #form-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  #form-message.success {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  #form-message.error {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const message = document.getElementById('form-message');
+  const button = form.querySelector('button');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    button.disabled = true;
+    button.textContent = 'A enviar…';
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString()
+      });
+
+      if (response.ok || response.type === 'success') {
+        message.textContent = 'Obrigado! A tua mensagem chegou.';
+        message.className = 'success';
+        form.reset();
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      message.textContent = 'Ups, algo correu mal. Tenta novamente ou envia-me email diretamente.';
+      message.className = 'error';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Enviar mensagem';
+  }});
+</script>
